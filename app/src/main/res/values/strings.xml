@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">MyRuns2</string>
+    <string name="input_type">Input Type </string>
+    <string name="activity_type">Activity Type </string>
+
+    <string-array name="tab_titles">
+        <item>START</item>
+        <item>HISTORY</item>
+        <item>SETTINGS</item>
+    </string-array>
+    <string-array name="input_type">
+        <item>Manual Entry</item>
+        <item>GPS</item>
+        <item>Automatic</item>
+    </string-array>
+    <string-array name="activity_type">
+        <item>Running</item>
+        <item>Walking</item>
+        <item>Standing</item>
+        <item>Cycling</item>
+        <item>Hiking</item>
+        <item>Downhill Skiing</item>
+        <item>Cross-Country Skiing</item>
+        <item>Snowboarding</item>
+        <item>Skating</item>
+        <item>Swimming</item>
+        <item>Mountain Biking</item>
+        <item>Wheelchair</item>
+        <item>Elliptical</item>
+        <item>Other</item>
+
+    </string-array>
+
+</resources>
