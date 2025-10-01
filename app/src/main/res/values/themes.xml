@@ -1,8 +1,6 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <style name="Base.Theme.MyRuns2" parent="Theme.Material3.DayNight">
-
     </style>
-
-    <style name="Theme.MyRuns2" parent="Base.Theme.MyRuns2" />
+    <style name="Theme.MyRuns2" parent="Base.Theme.MyRuns2" />\
 </resources>

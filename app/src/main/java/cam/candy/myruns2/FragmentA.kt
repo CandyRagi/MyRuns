@@ -1,5 +1,6 @@
 package cam.candy.myruns2
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -36,7 +37,7 @@ class FragmentA : Fragment() {
                 parent: AdapterView<*>, view: View?, position: Int, id: Long
             ) {
                 val selected = inputOptions[position]
-                Toast.makeText(requireContext(), "Input type: $selected", Toast.LENGTH_SHORT).show()
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
@@ -59,7 +60,7 @@ class FragmentA : Fragment() {
                 parent: AdapterView<*>, view: View?, position: Int, id: Long
             ) {
                 val selected = activityOptions[position]
-                Toast.makeText(requireContext(), "Activity type: $selected", Toast.LENGTH_SHORT).show()
+
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
@@ -68,12 +69,14 @@ class FragmentA : Fragment() {
         val startButton: Button = view.findViewById(R.id.startButton)
         startButton.setOnClickListener {
             val selectedInput = spinner1.selectedItem.toString()
-            val selectedActivity = spinner2.selectedItem.toString()
-            Toast.makeText(
-                requireContext(),
-                "Starting with: $selectedInput, $selectedActivity",
-                Toast.LENGTH_LONG
-            ).show()
+
+            if (selectedInput.equals("Manual Entry", ignoreCase = true)) {
+                val intent = Intent(requireContext(), ManualEntryActivity::class.java)
+                startActivity(intent)
+            } else {
+                val intent = Intent(requireContext(), MapEntryActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         return view

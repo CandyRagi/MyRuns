@@ -2,6 +2,18 @@
     <string name="app_name">MyRuns2</string>
     <string name="input_type">Input Type </string>
     <string name="activity_type">Activity Type </string>
+    <string name="map_activity_title">Maps</string>
+
+    <string-array name="unit_options">
+        <item>Metric</item>
+        <item>Imperial</item>
+    </string-array>
+
+    <string-array name="unit_values">
+        <item>metric</item>
+        <item>imperial</item>
+    </string-array>
+
 
     <string-array name="tab_titles">
         <item>START</item>
