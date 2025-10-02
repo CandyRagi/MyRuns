@@ -1,6 +1,54 @@
-<resources xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <style name="Base.Theme.MyRuns2" parent="Theme.Material3.DayNight">
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base App Theme -->
+    <style name="Base.Theme.MyRuns2" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <!-- Status/navigation bars -->
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:navigationBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar">?attr/isLightTheme</item>
+        <item name="android:windowLightNavigationBar">?attr/isLightTheme</item>
+
+        <!-- App Colors -->
+        <item name="colorPrimary">@color/teal_700</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorOnSecondary">@android:color/black</item>
+        <item name="colorSurface">@android:color/white</item>
+        <item name="colorOnSurface">@android:color/black</item>
+        <item name="colorError">@android:color/holo_red_dark</item>
+        <item name="colorOnError">@android:color/white</item>
+
+        <!-- Typography -->
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.MyRuns2.Body</item>
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.MyRuns2.Headline</item>
+
+        <!-- Apply boxy button style -->
+        <item name="materialButtonStyle">@style/Widget.MyRuns2.Button</item>
     </style>
-    <style name="Theme.MyRuns2" parent="Base.Theme.MyRuns2" />\
+
+    <style name="Theme.MyRuns2" parent="Base.Theme.MyRuns2" />
+
+    <!-- Typography -->
+    <style name="TextAppearance.MyRuns2.Body" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextAppearance.MyRuns2.Headline" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <!-- Custom Boxy Button -->
+    <style name="Widget.MyRuns2.Button" parent="Widget.Material3.Button">
+        <item name="shapeAppearance">@style/ShapeAppearance.MyRuns2.Boxy</item>
+    </style>
+
+    <!-- Define less-rounded shape -->
+    <style name="ShapeAppearance.MyRuns2.Boxy" parent="ShapeAppearance.Material3.Corner.None">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item> <!-- 0dp = perfect square, 4dp = boxy -->
+    </style>
+
 </resources>
