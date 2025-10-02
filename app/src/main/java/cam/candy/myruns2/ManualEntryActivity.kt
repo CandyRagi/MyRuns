@@ -1,12 +1,9 @@
 package cam.candy.myruns2
 
-import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.os.Bundle
-import android.text.InputType
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.setFragmentResultListener
 
 class ManualEntryActivity : AppCompatActivity() {
 
@@ -25,28 +22,54 @@ class ManualEntryActivity : AppCompatActivity() {
         val heartRateField = findViewById<TextView>(R.id.heartRateField)
         val commentField = findViewById<TextView>(R.id.commentField)
 
+        // Set up fragment result listener for all dialogs
+        supportFragmentManager.setFragmentResultListener("input_dialog_result", this) { requestKey, bundle ->
+            if (requestKey == "input_dialog_result") {
+                val value = bundle.getString("value")
+                val tag = bundle.getString("dialog_tag")
 
-        // Hook click listeners
+                value?.let {
+                    tag?.let { dialogTag ->
+                        handleDialogResult(dialogTag, value)
+                    }
+                }
+            }
+        }
+
+        // Hook click listeners - FIXED: Pass both type and dialog_tag in arguments
         dateField.setOnClickListener {
-            showInputDialog("Select Date", "date") { value -> dateField.text = "Date: $value" }
+            val dialog = InputDialogFragment.newInstance("date", "dateDialog")
+            dialog.show(supportFragmentManager, "dateDialog")
         }
+
         timeField.setOnClickListener {
-            showInputDialog("Select Time", "time") { value -> timeField.text = "Time: $value" }
+            val dialog = InputDialogFragment.newInstance("time", "timeDialog")
+            dialog.show(supportFragmentManager, "timeDialog")
         }
+
         durationField.setOnClickListener {
-            showInputDialog("Enter Duration", "float") { value -> durationField.text = "Duration: $value" }
+            val dialog = InputDialogFragment.newInstance("float", "durationDialog")
+            dialog.show(supportFragmentManager, "durationDialog")
         }
+
         distanceField.setOnClickListener {
-            showInputDialog("Enter Distance", "float") { value -> distanceField.text = "Distance: $value" }
+            val dialog = InputDialogFragment.newInstance("float", "distanceDialog")
+            dialog.show(supportFragmentManager, "distanceDialog")
         }
+
         caloriesField.setOnClickListener {
-            showInputDialog("Enter Calories", "number") { value -> caloriesField.text = "Calories: $value" }
+            val dialog = InputDialogFragment.newInstance("number", "caloriesDialog")
+            dialog.show(supportFragmentManager, "caloriesDialog")
         }
+
         heartRateField.setOnClickListener {
-            showInputDialog("Enter Heart Rate", "number") { value -> heartRateField.text = "Heart Rate: $value" }
+            val dialog = InputDialogFragment.newInstance("number", "heartRateDialog")
+            dialog.show(supportFragmentManager, "heartRateDialog")
         }
+
         commentField.setOnClickListener {
-            showInputDialog("Enter Comment", "text") { value -> commentField.text = "Comment: $value" }
+            val dialog = InputDialogFragment.newInstance("text", "commentDialog")
+            dialog.show(supportFragmentManager, "commentDialog")
         }
 
         // Save + Clear
@@ -58,56 +81,47 @@ class ManualEntryActivity : AppCompatActivity() {
         }
 
         clearBtn.setOnClickListener {
-            listOf(dateField, timeField, durationField, distanceField, caloriesField, heartRateField, commentField)
-                .forEach { it.text = it.resources.getResourceEntryName(it.id).replace("Field", "").replaceFirstChar { c -> c.uppercase() } }
+            listOf(
+                dateField, timeField, durationField, distanceField,
+                caloriesField, heartRateField, commentField
+            ).forEach {
+                it.text = it.resources.getResourceEntryName(it.id)
+                    .replace("Field", "")
+                    .replaceFirstChar { c -> c.uppercase() }
+            }
             Toast.makeText(this, "Data Cleared!", Toast.LENGTH_SHORT).show()
         }
     }
 
-    // Reusable dialog
-    private fun showInputDialog(title: String, type: String, onValueSet: (String) -> Unit) {
-        when (type) {
-            "date" -> {
-                val picker = DatePickerDialog(
-                    this,
-                    { _, _, _, _ -> /* do nothing */ },
-                    2024, 0, 1 // year, month, day (pick any defaults you want)
-                )
-                picker.show()
+    private fun handleDialogResult(dialogTag: String, value: String) {
+        when (dialogTag) {
+            "dateDialog" -> {
+                val dateField = findViewById<TextView>(R.id.dateField)
+                dateField.text = "Date"
             }
-            "time" -> {
-                val picker = TimePickerDialog(this, null, 12, 0, true)
-                picker.show()
+            "timeDialog" -> {
+                val timeField = findViewById<TextView>(R.id.timeField)
+                timeField.text = "Time"
             }
-            "float" -> {
-                val input = EditText(this)
-                input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-                AlertDialog.Builder(this)
-                    .setTitle(title)
-                    .setView(input)
-                    .setPositiveButton("OK",null)
-                    .setNegativeButton("Cancel", null)
-                    .show()
+            "durationDialog" -> {
+                val durationField = findViewById<TextView>(R.id.durationField)
+                durationField.text = "Duration"
             }
-            "number" -> {
-                val input = EditText(this)
-                input.inputType = InputType.TYPE_CLASS_NUMBER
-                AlertDialog.Builder(this)
-                    .setTitle(title)
-                    .setView(input)
-                    .setPositiveButton("OK",null)
-                    .setNegativeButton("Cancel", null)
-                    .show()
+            "distanceDialog" -> {
+                val distanceField = findViewById<TextView>(R.id.distanceField)
+                distanceField.text = "Distance"
             }
-            "text" -> {
-                val input = EditText(this)
-                input.inputType = InputType.TYPE_CLASS_TEXT
-                AlertDialog.Builder(this)
-                    .setTitle(title)
-                    .setView(input)
-                    .setPositiveButton("OK",null)
-                    .setNegativeButton("Cancel", null)
-                    .show()
+            "caloriesDialog" -> {
+                val caloriesField = findViewById<TextView>(R.id.caloriesField)
+                caloriesField.text = "Calories"
+            }
+            "heartRateDialog" -> {
+                val heartRateField = findViewById<TextView>(R.id.heartRateField)
+                heartRateField.text = "Heart Rate"
+            }
+            "commentDialog" -> {
+                val commentField = findViewById<TextView>(R.id.commentField)
+                commentField.text = "Comment"
             }
         }
     }

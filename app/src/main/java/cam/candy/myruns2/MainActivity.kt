@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Util.checkPermissions(this)
+
         supportActionBar?.title= getString(R.string.app_name)
         tabTitles = resources.getStringArray(R.array.tab_titles);
 
@@ -53,6 +55,8 @@ class MainActivity : AppCompatActivity() {
             tab.text = tabTitles[position] }
         tabLayoutMediator = TabLayoutMediator(tabLayout, viewPager2, tabConfigurationStrategy)
         tabLayoutMediator.attach()
+
+
 
 
     }

@@ -20,7 +20,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ManualEntryActivity" />
+        <activity
+            android:name=".ManualEntryActivity"/>
+
         <activity android:name=".MapEntryActivity" />
         <activity android:name=".UserProfileActivity"/>
         <provider

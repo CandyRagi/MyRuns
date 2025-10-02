@@ -10,7 +10,6 @@ import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
@@ -45,8 +44,6 @@ class UserProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.user_profile_activity)
 
-        Util.checkPermissions(this)
-
         // Initialize views
         profileImageView = findViewById(R.id.profileImageView)
         changePhotoButton = findViewById(R.id.changePhotoButton)
@@ -66,8 +63,10 @@ class UserProfileActivity : AppCompatActivity() {
 
         // Initialize ViewModel
         myViewModel = ViewModelProvider(this).get(MyViewModel::class.java)
-        myViewModel.userImage.observe(this) { it ->
-            profileImageView.setImageBitmap(it)
+        myViewModel.userImage.observe(this) { bitmap ->
+            bitmap?.let {
+                profileImageView.setImageBitmap(it)
+            }
         }
 
         // Register camera result
@@ -89,6 +88,19 @@ class UserProfileActivity : AppCompatActivity() {
             }
         }
 
+        // Set up fragment result listener for dialog results
+        supportFragmentManager.setFragmentResultListener("input_dialog_result", this) { requestKey, bundle ->
+            if (requestKey == "input_dialog_result") {
+                val value = bundle.getString("value")
+                val tag = bundle.getString("dialog_tag")
+
+                // Handle photo dialog specifically
+                if (tag == "changePhotoDialog") {
+                    value?.let { handleDialogResult(it) }
+                }
+            }
+        }
+
         // If temp image exists, show it
         if (tempImgFile.exists()) {
             val bitmap = Util.getBitmap(this, tempImgUri)
@@ -97,18 +109,9 @@ class UserProfileActivity : AppCompatActivity() {
 
         loadProfileData()
 
-        // Show dialog when Change Photo is clicked
+        // Show dialog when Change Photo is clicked - FIXED: Added dialogTag parameter
         changePhotoButton.setOnClickListener {
-            val options = arrayOf("Open Camera", "Select from Gallery")
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Pick Profile Picture")
-            builder.setItems(options) { _, which ->
-                when (which) {
-                    0 -> openCamera()
-                    1 -> openGallery()
-                }
-            }
-            builder.show()
+            InputDialogFragment.newInstance("photo", "changePhotoDialog").show(supportFragmentManager, "changePhotoDialog")
         }
 
         // SAVE button
@@ -123,6 +126,13 @@ class UserProfileActivity : AppCompatActivity() {
             clearForm()
             Toast.makeText(this, "Cancelled!!", Toast.LENGTH_SHORT).show()
             finish()
+        }
+    }
+
+    private fun handleDialogResult(value: String) {
+        when (value) {
+            "camera" -> openCamera()
+            "gallery" -> openGallery()
         }
     }
 
@@ -186,6 +196,7 @@ class UserProfileActivity : AppCompatActivity() {
             if (file.exists()) {
                 val bitmap = Util.getBitmap(this, Uri.fromFile(file))
                 profileImageView.setImageBitmap(bitmap)
+                myViewModel.userImage.value = bitmap
             }
         } else {
             profileImageView.setImageResource(R.drawable.default_profile)
@@ -193,14 +204,13 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun clearForm() {
-        /*
-        editName.text.clear()
-        editEmail.text.clear()
-        editPhone.text.clear()
-        editClass.text.clear()
-        editMajor.text.clear()
-        genderGroup.clearCheck()
-        profileImageView.setImageResource(R.drawable.default_profile)
-        */
+        // Optional: Clear form fields if needed
+        // editName.text.clear()
+        // editEmail.text.clear()
+        // editPhone.text.clear()
+        // editClass.text.clear()
+        // editMajor.text.clear()
+        // genderGroup.clearCheck()
+        // profileImageView.setImageResource(R.drawable.default_profile)
     }
 }
